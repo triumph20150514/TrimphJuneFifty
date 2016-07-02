@@ -14,9 +14,9 @@ import rx.Subscriber;
  */
 public class MoviceApi {
     NetService netService;
-     
-    public MoviceApi() {
 
+    public MoviceApi() {
+        //jianli
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.douban.com/v2/movie/").build();
         netService = retrofit.create(NetService.class);
     }
