@@ -21,8 +21,8 @@ import java.util.Vector;
  * @description 垂直方向文字滚动
  * Project TrimphJuneFifty
  * Package_name com.trimh.nuannuan.view
- * Created by 涛 on 2016/6/26.
- * Created by 涛  on 2016/6/26.
+ * Created by trimph on 2016/6/26.
+ * Created by trimph on 2016/6/26.
  */
 public class VerticalRollingTv extends View {
 

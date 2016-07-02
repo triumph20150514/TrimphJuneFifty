@@ -33,8 +33,8 @@ import java.util.Map;
  * @description: 异常处理  嘎嘎嘎
  * Project TrimphJuneFifty
  * Package_name com.trimh.nuannuan.exception
- * Created by 涛 on 2016/6/26.
- * Created by 涛  on 2016/6/26.
+ * Created by trimph on 2016/6/26.
+ * Created by trimph  on 2016/6/26.
  */
 public class TrimphException implements Thread.UncaughtExceptionHandler {
 

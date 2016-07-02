@@ -7,8 +7,8 @@ import com.trimh.nuannuan.exception.TrimphException;
 /**
  * Project TrimphJuneFifty
  * Package_name com.trimh.nuannuan.base
- * Created by 涛 on 2016/6/25.
- * Created by 涛  on 2016/6/25.
+ * Created by trimph on 2016/6/25.
+ * Created by trimph  on 2016/6/25.
  */
 public class BaseApplication extends Application {
 

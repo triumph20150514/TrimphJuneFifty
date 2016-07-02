@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Project TrimphJuneFifty
  * Package_name com.trimh.nuannuan.bean
- * Created by 涛 on 2016/6/29.
+ * Created by trimph on 2016/6/29.
  * Created by 涛  on 2016/6/29.
  */
 public class MoviceBean {

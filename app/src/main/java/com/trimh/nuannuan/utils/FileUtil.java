@@ -10,8 +10,8 @@ import java.io.File;
  * @descrition 错误报告存储路径
  * Project TrimphJuneFifty
  * Package_name com.trimh.nuannuan.utils
- * Created by 涛 on 2016/6/26.
- * Created by 涛  on 2016/6/26.
+ * Created by trimph on 2016/6/26.
+ * Created by trimph  on 2016/6/26.
  */
 public class FileUtil {
 
