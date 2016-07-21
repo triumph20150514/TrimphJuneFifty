@@ -1,8 +1,10 @@
 package com.trimh.nuannuan.net;
 
+import android.graphics.Picture;
 import android.telecom.Call;
 
 import com.trimh.nuannuan.bean.MoviceBean;
+import com.trimh.nuannuan.bean.PictureBean;
 
 import java.util.Observer;
 
@@ -21,5 +23,11 @@ public interface NetService {
 
     @GET("top250")
     Observable<MoviceBean> getMovice(@Query("start") int start, @Query("count") int count);
+
+    @GET("list")
+    Observable<PictureBean> getPictureList(@Query("page") int page, @Query("rows") int rows);
+
+
+
 
 }

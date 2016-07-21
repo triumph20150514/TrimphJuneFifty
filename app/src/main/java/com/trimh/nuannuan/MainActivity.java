@@ -1,61 +1,136 @@
 package com.trimh.nuannuan;
 
-import android.app.DatePickerDialog;
-import android.app.NotificationManager;
-import android.os.Environment;
+import android.graphics.Paint;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RelativeLayout;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.DatePicker;
-import android.widget.TextView;
+import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
+import com.flyco.banner.transform.ZoomOutSlideTransformer;
+import com.trimh.nuannuan.adapter.PictureAdapter;
+import com.trimh.nuannuan.base.BaseActivity;
+import com.trimh.nuannuan.bean.PictureBean;
+import com.trimh.nuannuan.net.PictureApi;
+import com.trimh.nuannuan.view.banner.BannerIndicator;
+import com.trimh.nuannuan.view.banner.SimpleBanner;
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
-import com.trimh.nuannuan.utils.FileUtil;
-import com.trimh.nuannuan.view.DataSetAdapter;
-import com.trimh.nuannuan.view.VerticalRollingTv;
+import java.util.Locale;
 
-import java.util.Arrays;
+import rx.Subscriber;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * @description: Project TrimphJuneFifty
+ * Package_name com.trimh.nuannuan
+ * Created by Trimph on 2016/7/4.
+ */
+public class MainActivity extends BaseActivity {
+
+
+    public RecyclerView recyclerView;
+    public PullLoadMoreRecyclerView pullLoadMoreRecyclerView;
+    public PictureAdapter pictureAdapter;
+    public int page;
+    public boolean isRefresh = true;
+    public BannerIndicator simpleBanner;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void initData() {
+        pullLoadMoreRecyclerView.setRefreshing(true);
+        httpMethod(1);
+    }
 
-        String[] mStrs = {
-                "君不见，黄河之水天上来，奔流到海不复回",
-                "君不见，高堂明镜悲白发，朝如青丝暮成雪",
-                "人生得意须尽欢，莫使金樽空对月",
-                "天生我材必有用，千金散尽还复来",
-                "烹羊宰牛且为乐，会须一饮三百杯",
-                "岑夫子，丹丘生，将进酒，杯莫停"
-        };
-        VerticalRollingTv verticalRollingTv = (VerticalRollingTv) findViewById(R.id.rollingTv);
+    @Override
+    protected void initView() {
 
+        View bann = LayoutInflater.from(this).inflate(R.layout.banner_layout, null);
 
-        verticalRollingTv.setDataSetAdapter(new DataSetAdapter<String>(Arrays.asList(mStrs)) {
+        simpleBanner = (BannerIndicator) bann.findViewById(R.id.banner);
+//        if (simpleBanner != null) {
+//            simpleBanner.setTransformerClass(ZoomOutSlideTransformer.class);
+//        }
+
+//        simpleBanner = new BannerIndicator(this);
+
+        simpleBanner.setIndicatorStyle(0);
+
+        simpleBanner.setIndicatorSelectorRes(R.mipmap.ic_unselect, R.mipmap.ic_select);
+//        simpleBanner.setIndicatorCornerRadius(10);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        pullLoadMoreRecyclerView = (PullLoadMoreRecyclerView) findViewById(R.id.pull_Refresh);
+
+        if (pictureAdapter == null) {
+            pictureAdapter = new PictureAdapter(MainActivity.this);
+        }
+        pictureAdapter.setHanderView(bann);
+        recyclerView.setAdapter(pictureAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    protected void initListener() {
+        pullLoadMoreRecyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                isRefresh = true;
+                httpMethod(page);
+            }
 
             @Override
-            protected String text(String s) {
-                return s;
+            public void onLoadMore() {
+                page = 1 + page;
+                isRefresh = false;
+                httpMethod(page);
             }
         });
+    }
 
-        verticalRollingTv.run();
 
+    public void httpMethod(final int page) {
 
-//        Log.e("Environment path", Environment.getExternalStorageDirectory().getAbsolutePath() + "");
-//        Log.e("Environment state", Environment.getExternalStorageState() + "");
-//        Log.e("Environment getName", Environment.getExternalStorageDirectory().getName() + "");
-//        Log.e("Environment getName", this.getCacheDir().getAbsolutePath() + "");
-//        Log.e("Environment getName", this.getFilesDir().getPath() + "");
-//
-//        Log.e("Environment getName", this.getExternalFilesDir("file").getPath() + "");
-//        Log.e("Environment getName", this.getExternalCacheDirs()[0].getPath() + "null");
-//
-//        Log.e("Environment getName", FileUtil.getInstance(this).getSavePath() + "");
+//        Locale locale=new Locale(Locale.);
+        loadDialog.showDialog();
 
+        PictureApi.getInstance().getPictureList(new Subscriber<PictureBean>() {
+            @Override
+            public void onCompleted() {
+                loadDialog.closeDialog();
+                pullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                pullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                loadDialog.closeDialog();
+            }
+
+            @Override
+            public void onNext(PictureBean pictureBean) {
+                loadDialog.closeDialog();
+                simpleBanner.setSource(pictureBean.getTngou()).startScroll();
+                if (isRefresh) {
+                    pictureAdapter.setTngouBeans(pictureBean.getTngou());
+                } else {
+                    pictureAdapter.appendTngonBeans(pictureBean.getTngou());
+                }
+                pictureAdapter.notifyDataSetChanged();
+
+            }
+        }, page, 10);
 
     }
+
+    @Override
+    protected int layoutResID() {
+        return R.layout.activity_main;
+    }
+
+
 }
