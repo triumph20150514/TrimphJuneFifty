@@ -16,6 +16,7 @@ import com.trimh.nuannuan.bean.PictureBean;
 import com.trimh.nuannuan.net.PictureApi;
 import com.trimh.nuannuan.view.banner.BannerIndicator;
 import com.trimh.nuannuan.view.banner.SimpleBanner;
+import com.trimh.nuannuan.view.indicator.RoundCornerIndicaor;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.Locale;
@@ -49,6 +50,7 @@ public class MainActivity extends BaseActivity {
         View bann = LayoutInflater.from(this).inflate(R.layout.banner_layout, null);
 
         simpleBanner = (BannerIndicator) bann.findViewById(R.id.banner);
+
 //        if (simpleBanner != null) {
 //            simpleBanner.setTransformerClass(ZoomOutSlideTransformer.class);
 //        }
@@ -58,9 +60,11 @@ public class MainActivity extends BaseActivity {
         simpleBanner.setIndicatorStyle(0);
 
         simpleBanner.setIndicatorSelectorRes(R.mipmap.ic_unselect, R.mipmap.ic_select);
-//        simpleBanner.setIndicatorCornerRadius(10);
+
+        simpleBanner.setIndicatorCornerRadius(10);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
 
         pullLoadMoreRecyclerView = (PullLoadMoreRecyclerView) findViewById(R.id.pull_Refresh);
 
@@ -114,6 +118,12 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onNext(PictureBean pictureBean) {
                 loadDialog.closeDialog();
+                if (pictureBean == null) {
+                    return;
+                }
+                if (pictureBean.getTngou() == null) {
+                    return;
+                }
                 simpleBanner.setSource(pictureBean.getTngou()).startScroll();
                 if (isRefresh) {
                     pictureAdapter.setTngouBeans(pictureBean.getTngou());

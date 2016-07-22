@@ -15,6 +15,9 @@ import com.trimh.nuannuan.utils.loading.sprite.Sprite;
 
 
 /**
+ *  原文地址：
+ *  ## Thanks
+ - [SpinKit](https://github.com/tobiasahlin/SpinKit).
  * Created by ybq.
  */
 public class SpinKitView extends ProgressBar {

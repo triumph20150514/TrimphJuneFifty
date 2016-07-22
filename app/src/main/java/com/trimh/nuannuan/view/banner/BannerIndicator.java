@@ -10,6 +10,8 @@ import com.flyco.banner.widget.Banner.BaseIndicaorBanner;
 import com.trimh.nuannuan.R;
 import com.trimh.nuannuan.bean.PictureBean;
 import com.trimh.nuannuan.contantobj.ConstantObj;
+import com.trimh.nuannuan.utils.LogUtlis;
+import com.trimh.nuannuan.view.indicator.RoundCornerIndicaor;
 
 /**
  * @description: Project TrimphJuneFifty
@@ -46,4 +48,20 @@ public class BannerIndicator extends BaseIndicaorBanner<PictureBean.TngouBean, B
         return view;
     }
 
+    RoundCornerIndicaor roundCornerIndicaor;
+
+    @Override
+    public View onCreateIndicator() {
+        roundCornerIndicaor = new RoundCornerIndicaor(context);
+        roundCornerIndicaor.setViewPager(vp);
+        return roundCornerIndicaor;
+    }
+
+    @Override
+    public void setCurrentIndicator(int position) {
+        LogUtlis.e(position + "position");
+
+//        roundCornerIndicaor.setCurrentItem(position);
+        roundCornerIndicaor.setCurrentItem(position);
+    }
 }

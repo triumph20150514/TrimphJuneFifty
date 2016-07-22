@@ -13,6 +13,7 @@ import com.flyco.banner.widget.Banner.base.BaseBanner;
 import com.trimh.nuannuan.R;
 import com.trimh.nuannuan.bean.PictureBean;
 import com.trimh.nuannuan.contantobj.ConstantObj;
+import com.trimh.nuannuan.view.indicator.RoundCornerIndicaor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,15 +60,19 @@ public class SimpleBanner extends BaseBanner<PictureBean.TngouBean, SimpleBanner
 
     @Override
     public View onCreateIndicator() {
-        ba = new BannerIndicator(context);
+       /* ba = new BannerIndicator(context);
         ba.setHorizontalGravity(ALIGN_RIGHT);
         ba.setIndicatorSelectorRes(R.mipmap.ic_unselect, R.mipmap.ic_select);
-        return ba;
+        return ba;*/
+
+        return null;
     }
 
+    public RoundCornerIndicaor roundCornerIndicaor;
     @Override
     public void setCurrentIndicator(int position) {
 //        ba.setCurrentIndicator(position);
+
     }
 
     @Override
