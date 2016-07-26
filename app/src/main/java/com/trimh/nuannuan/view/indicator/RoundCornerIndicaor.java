@@ -29,6 +29,8 @@ public class RoundCornerIndicaor extends View implements IPageListener {
     public int indicatorGap;
     public Context context;
 
+    public int cornerRadius;
+
     public int count;
     public List<GradientDrawable> unGradientDrawables = new ArrayList<>();
     public List<Rect> unRect = new ArrayList<>();
@@ -39,16 +41,25 @@ public class RoundCornerIndicaor extends View implements IPageListener {
     private boolean isSnap = false;
 
     public RoundCornerIndicaor(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public RoundCornerIndicaor(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
+        init();
+    }
+
+    private void init() {
+        indicatorWidth = dp2px(6);
+        indicatorHight = dp2px(6);
+        //间隔
+        indicatorGap = dp2px(10);
+        cornerRadius = dp2px(3);
     }
 
     public RoundCornerIndicaor(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.context = context;
+        this(context, attrs, 0);
     }
 
     @Override
@@ -57,7 +68,11 @@ public class RoundCornerIndicaor extends View implements IPageListener {
         if (viewPager == null) {
             return;
         }
-
+        indicatorWidth = dp2px(6);
+        indicatorHight = dp2px(6);
+        //间隔
+        indicatorGap = dp2px(10);
+        cornerRadius = dp2px(3);
         this.viewPager = viewPager;
         viewPager.removeOnPageChangeListener(this);
         viewPager.addOnPageChangeListener(this);
@@ -101,23 +116,21 @@ public class RoundCornerIndicaor extends View implements IPageListener {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-
         /**
          *水平 垂直位移   。。。。。。。
          */
         int verticalOffset = getPaddingTop() + (getHeight() - getPaddingTop() - getPaddingBottom()) / 2 - indicatorHight / 2;
-
+        LogUtlis.e("indicatorLayoutWidth" + " verticalOffset" + verticalOffset);
         /**
          * 宽度
          */
         int indicatorLayoutWidth = indicatorWidth * count + indicatorGap * (count - 1);
-
+        LogUtlis.e("indicatorLayoutWidth" + " indicatorLayoutWidth" + indicatorLayoutWidth);
         /**
          * 水平位移
          */
         int horizontalOffset = getPaddingLeft() + (getWidth() - getPaddingLeft() - getPaddingRight()) / 2 - indicatorLayoutWidth / 2;
-
+        LogUtlis.e("indicatorLayoutWidth  horizontalOffset" + " horizontalOffset" + horizontalOffset);
 
         drawUnselect(canvas, count, horizontalOffset, verticalOffset);
 
@@ -146,6 +159,7 @@ public class RoundCornerIndicaor extends View implements IPageListener {
                 result = Math.min(result, size);
             }
         }
+        LogUtlis.e("result  higth" + result);
         return result;
     }
 
@@ -154,15 +168,21 @@ public class RoundCornerIndicaor extends View implements IPageListener {
         int size = MeasureSpec.getSize(widthMeasureSpec);
         int mode = MeasureSpec.getMode(widthMeasureSpec);
 
+        LogUtlis.e("result  Width  EXACTLY  mode" + size + " " + count + "  " + mode);
         if (mode == MeasureSpec.EXACTLY || count == 0) {
             result = size;
+            LogUtlis.e("result  Width  EXACTLY" + size + " " + count + "  " + result);
         } else {
+
+            LogUtlis.e("result  Width  EXACTLY  mode" + size + " " + count + "  else");
             int padding = getPaddingLeft() + getPaddingRight();
             result = padding + indicatorWidth * count + indicatorGap * (count - 1);
+            LogUtlis.e("result  Width" + indicatorWidth + " " + count + "  " + indicatorGap);
             if (mode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, size);
             }
         }
+        LogUtlis.e("result  Width" + result);
         return result;
     }
 
@@ -222,7 +242,6 @@ public class RoundCornerIndicaor extends View implements IPageListener {
             gradientDrawable.setBounds(rect);
             gradientDrawable.draw(canvas);
 
-
         }
 
 
@@ -234,6 +253,12 @@ public class RoundCornerIndicaor extends View implements IPageListener {
         if (viewPager == null) {
             return;
         }
+        this.viewPager = viewPager;
+
+        indicatorWidth = dp2px(6);
+        indicatorHight = dp2px(6);
+        //间隔
+        indicatorGap = dp2px(10);
 
         viewPager.removeOnPageChangeListener(this);
         viewPager.addOnPageChangeListener(this);
@@ -268,6 +293,12 @@ public class RoundCornerIndicaor extends View implements IPageListener {
             invalidate();
         }
     }
+
+    protected int dp2px(float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
+
 
     @Override
     public void onPageScrollStateChanged(int state) {

@@ -7,6 +7,6 @@
     <com.trimh.nuannuan.view.banner.BannerIndicator
         android:id="@+id/banner"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="230dp"
         app:bb_isLoopEnable="false"></com.trimh.nuannuan.view.banner.BannerIndicator>
 </LinearLayout>
